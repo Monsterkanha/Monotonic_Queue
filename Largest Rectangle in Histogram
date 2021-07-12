@@ -1,0 +1,90 @@
+For a current bar we want to have its left boundary and right boundary, and to calculate that boundary,
+We would maintain two vector one for left and one for right,
+
+left[i] will contain the index of first element to left which is smaller than my current.
+
+For any bar i the maximum rectangle is of width r - l - 1 where r - is the last coordinate of
+the bar to the right with height h[r] >= h[i] and l - is the last coordinate of the bar to the left which height h[l] >= h[i].
+
+
+3 1 5 4 2 3 
+
+so for calculating left boundary for 2. We start checking at 4, Now if that value is bigger than we can jump to Left[ p] why ??
+
+
+Because We know between Left[p] and p all elements are greater than arr[p] so we can jump directly to Left[p] and if that is also greater than my current
+then I will jump to its Left. And this way we store answer for all index.
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        vector<int> Left(n) , Right(n);
+        Left[0] = -1;
+        
+        
+        for(int i = 1; i< n; i++){
+            int p = i-1;
+            while(p >= 0 && heights[p] >= heights[i]){
+                p = Left[p];                 // This section is important.
+            }
+            Left[i] = p;
+        }
+        
+        
+        
+        Right[n-1] = n;
+        for(int i = n-2; i >= 0 ; i--){
+            int p = i+1;
+            while(p < n && heights[p] >= heights[i]){
+                p = Right[p];
+            }
+            Right[i] = p;
+        }
+        
+        
+        int ans = 0;
+        for(int i = 0 ; i < n;  i++){
+            ans = max(ans, (Right[i] - Left[i] -1)*heights[i]);
+        }
+        return ans;
+        
+    }
+};
+
+
+
+
+
+2. Use stack to maintain ascending order.
+So if we have got some value that is smaller than top of stack then we can say this is right bound for top.
+How to find left for that? 
+That is simply index of element just before that since, all element in between ascending we have popped them so this way we will get our left.
+
+Trick use of senital 0 at node, since might be some couldn't get their end point so for popping them we are pusing 0 at end of array.
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& arr) {
+        stack<int> st;
+        arr.push_back(0);
+        int n = arr.size();
+        int mx = 0;
+        
+        for(int i = 0 ; i < n ; i++){
+            while(!st.empty() && arr[i] < arr[st.top()]){
+                int h = arr[st.top()];
+                st.pop();
+                
+                int id = (st.empty())?-1:st.top();
+                
+                mx = max(mx, h*(i- id -1));
+            }
+            st.push(i);
+        }
+        return mx;
+        
+    }
+};
