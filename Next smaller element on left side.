@@ -1,0 +1,20 @@
+A[j] < A[i] for j < i and maximum j.
+
+We will maintain increasing queue from right and if curr is smaller than right of it. then this will gonna be answer for element in stack which are greater than this.
+Why, we are popping because those are bigger than my current and i have found answer for them.
+So, by reversing and using monotonic concept we can achieve our answer.
+
+vector<int> Solution::prevSmaller(vector<int> &A) {
+    int n = A.size();
+    vector<int> p(n,-1);
+    stack<int> st;
+    for(int i = n- 1; i >=0; i--){
+        while(!st.empty() && A[i] < A[st.top()]){
+            p[st.top()] = A[i];
+            st.pop();
+        }
+        st.push(i);
+    }
+    return p;
+    
+}
