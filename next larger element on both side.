@@ -1,0 +1,37 @@
+Here, We think maintaining queue.
+        ___
+____    |  |
+|   |__ |
+|   |  |
+|   |  |
+|   |  |
+
+now, we know as our third element is pushed this will gonna be next larger from right. so this way we can find.
+
+suppose if my current element is greater than my top of stack then this is going to be next greater for elements in stack which are smaller.
+So, we will maintain decreasing queue. 
+
+if current is greater than top then pop and for popped element we know right index is this only and left is previous on top.
+
+So, this way we can get our answer.
+
+PS :- Don't take modulo at each step.
+
+int Solution::maxSpecialProduct(vector<int> &A) {
+    stack<int> st;
+    int n = A.size() , mod = 1e9 + 7;
+    long long ans = 0;
+    for(int i = 0 ; i < n ; i++){
+        while(!st.empty() && A[i] >= A[st.top()]){
+            st.pop();
+            if(st.empty()){
+                continue;
+            }
+            else {
+                ans = max(ans , (st.top()*1LL*i));
+            }
+        }
+        st.push(i);
+    }
+    return ans%mod;
+}
