@@ -1,0 +1,23 @@
+1. Use sorting first and last mismatch position is our answer.
+
+2. Use min and maxi variable.
+For current number we want to find the last index from left that is smaller than max found till that index.
+and similarily from right, last index from right that is smaller that minon right;
+
+int findUnsortedSubarray(vector<int>& A) {
+        int mini = INT_MAX , maxi = INT_MIN , start = -1, end = -2 , n = A.size();
+        for(int i = 0 ; i < n; i++){
+            maxi = max(maxi , A[i]);
+            if(maxi > A[i]){
+                end = i;
+            }
+        }
+        for(int i = n-1; i >= 0 ; i--){
+            mini = min(mini , A[i]);
+            if(mini < A[i]){
+                start = i;
+            }
+        }
+        return end- start + 1;
+        
+    }
