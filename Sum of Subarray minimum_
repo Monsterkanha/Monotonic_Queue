@@ -1,0 +1,31 @@
+Here, If we could find out what is long lasting range for current element we are done.
+So for that we need to find our next and previous smaller element. and product of this difference from current is our answer.
+
+We maintain increasing queue.
+if current element is smaller than top then we know kingdom for top element is over so we need to find the left bound for 
+that we are maintaining increasing queue and index of just previous on stack is our left boundary. so simply multilpy them.
+
+
+1. Identify which type of queue is suitable and then perform accordingly. 
+ps :- for previous lesser start from right and maintain increasing queue.
+2. for next smaller or greater increasing queue from right.
+
+when we want to calculate boundary eg. Histogram check whether the lower element is breakdown point or higher. If lower is break down then maintain decreasing 
+else in rainwater increasing.
+
+int sumSubarrayMins(vector<int>& arr) {
+        long long ans = 0;
+        arr.push_back(0);
+        int n = arr.size() , mod = 1e9 + 7;
+        stack<int> s;
+        for(int i = 0 ; i < n; i++){
+            while(!s.empty() && arr[s.top()] > arr[i]){
+                int h = arr[s.top()] , t = s.top();
+                s.pop();
+                int idx = (s.empty())?-1:s.top();
+                (ans += h*1LL*(t-idx)*(i-t))%=mod;
+            }
+            s.push(i);
+        }
+        return ans;
+    }
