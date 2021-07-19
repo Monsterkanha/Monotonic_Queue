@@ -1,0 +1,25 @@
+Here, see a pattern if we sort the array then value at index i will be maximum for all subsequence form by previous elements so this will this many times get added.
+and similarily this will be minimum for all right side subsequences.
+
+int mod = 1e9 + 7;
+class Solution {
+public:
+    int power(long long x, long long n){
+        long long res = 1;
+        while(n){
+            if(n&1) res = (res*x)%mod;
+            x = (x*x)%mod;
+            n >>= 1;
+        }
+        return res%mod;
+    }
+    int sumSubseqWidths(vector<int>& nums) {
+        long long ans = 0;
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for(int i = 0 ; i < n; i++){
+           (ans += (nums[i]*1LL*(power(2,i) - power(2,n-i-1)))%mod) %= mod;
+        }
+        return ans;
+    }
+};
