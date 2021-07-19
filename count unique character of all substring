@@ -1,0 +1,42 @@
+Let's think about how a character can be found as a unique character.
+
+Think about string "XAXAXXAX" and focus on making the second "A" a unique character.
+We can take "XA(XAXX)AX" and between "()" is our substring.
+We can see here, to make the second "A" counted as a uniq character, we need to:
+
+insert "(" somewhere between the first and second A
+insert ")" somewhere between the second and third A
+For step 1 we have "A(XA" and "AX(A", 2 possibility.
+For step 2 we have "A)XXA", "AX)XA" and "AXX)A", 3 possibilities.
+
+
+index[26][2] record last two occurrence index for every upper characters.
+Initialise all values in index to -1.
+Loop on string S, for every character c, update its last two occurrence index to index[c].
+Count when loop. For example, if "A" appears twice at index 3, 6, 9 seperately, we need to count:
+For the first "A": (6-3) * (3-(-1))"
+For the second "A": (9-6) * (6-3)"
+For the third "A": (N-9) * (9-6)"
+
+class Solution {
+public:
+    int uniqueLetterString(string s) {
+        int n = s.size();
+        vector<vector<int>> index(26, vector<int>(2,-1));
+        long long res = 0, mod = 1e9 + 7;
+        for(int i = 0; i < n; i++){
+            int c = s[i] - 'A';
+            res = (res + (i - index[c][1])*(index[c][1] - index[c][0]) % mod)%mod;
+            index[c][0] = index[c][1];
+            index[c][1] = i;
+        }
+        for(int i = 0; i < 26; i++){
+            res = (res + (n - index[i][1])*(index[i][1] - index[i][0]) % mod)%mod;
+        }
+        return res;
+    }
+};
+
+
+
+@credit to LEE
