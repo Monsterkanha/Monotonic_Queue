@@ -1,0 +1,31 @@
+Here, we store cnt of all character. and now start from left decrease cnt of this, and if this is already present then continue;
+We are maintain a increasing stack if current is smaller than top of stack and top of stack has more cnt available then remove that one false its visited,
+
+Simply, it means we want to add this later.
+
+and visit true for curr.
+
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        vector<int> cnt(26,0);
+        vector<bool> vis(26,false);
+        
+        for(auto x: s){
+            cnt[x-'a']++;
+        }
+        string res = "";                        // This will act like stack,
+        for(auto c: s){
+            cnt[c-'a']--;
+            if(vis[c-'a']) continue;
+            
+            while(!res.empty() && res.back() > c && cnt[res.back()-'a']){
+                vis[res.back()-'a'] = false;
+                res.pop_back();
+            }
+            res.push_back(c);
+            vis[c-'a'] = true;
+        }
+        return res;
+    }
+};
