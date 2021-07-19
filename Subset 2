@@ -1,0 +1,34 @@
+Use backtracking to generate the array.
+1. sort the array in case of duplicacy no duplicate achive.
+1 2 3 4 5 
+   push (1) 
+   [1, subset(2,3,4,5)]
+   pop 1 , and push (2)
+   [2, subset(3,4,5)]
+   pop 2 , push 3;
+   [3, subset(4,5)]
+   pop 3 push 4 and so on.
+   
+   
+ when duplicate is found if this is same as previous element then avoid this else call for it too.
+ 
+class Solution {
+public:
+    void help(vector<vector<int>>& res, vector<int>& curr, vector<int>& nums, int begin){
+        res.push_back(curr);
+        for(int i = begin; i < nums.size(); i++){
+            if(i == begin || nums[i] != nums[i-1]){
+                curr.push_back(nums[i]);
+                help(res,curr, nums,i+1);
+                curr.pop_back();
+            }
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> curr;
+        sort(nums.begin(), nums.end());
+        help(res, curr, nums, 0);
+        return res;
+    }
+};
